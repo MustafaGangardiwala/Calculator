@@ -34,13 +34,15 @@
     <button type="button" onclick="setOperation('*')">*</button>
     <br/>
 
-    <button type="button" onclick="appendToInput('0')">0</button>
+
     <button type="button" onclick="appendToInput('.')">.</button>
+    <button type="button" onclick="appendToInput('0')">0</button>
     <button type="button" onclick="clearInput()">C</button>
     <button type="button" onclick="setOperation('/')">/</button>
     <br/>
 
-    <button type="button" onclick="evaluate()">=</button>
+    <!-- <button type="button" onclick="evaluate()">=</button> -->
+    <button type="button" onclick="evaluateOperation()">Enter</button>
 </form>
 
 <!-- Result: <span id="result"></span> -->
@@ -85,41 +87,45 @@
 
     function calculate() {
         let input = document.getElementById("input").value;
-        let operationText = currentOperation.trim();
+        let operationText = String(currentOperation).trim();
         let operation = operationText.charAt(operationText.length - 1);
 
         if (operation && input) {
             let firstNumber = parseFloat(operationText.split(" ")[0]);
             let secondNumber = parseFloat(input);
 
-            switch (operation) {
-                case '+':
-                    return firstNumber + secondNumber;
-                case '-':
-                    return firstNumber - secondNumber;
-                case '*':
-                    return firstNumber * secondNumber;
-                case '/':
-                    if (secondNumber !== 0) {
-                        return firstNumber / secondNumber;
-                    } else {
-                        return "Error: Division by zero";
-                    }
+            if (!isNaN(firstNumber) && !isNaN(secondNumber)) {
+                switch (operation) {
+                    case '+':
+                        return firstNumber + secondNumber;
+                    case '-':
+                        return firstNumber - secondNumber;
+                    case '*':
+                        return firstNumber * secondNumber;
+                    case '/':
+                        if (secondNumber !== 0) {
+                            return firstNumber / secondNumber;
+                        } else {
+                            alert("Error: Division by zero");
+                            return null;
+                        }
+                }
             }
         }
 
-        return "Error: Invalid operation";
+        alert("Error: Invalid operation");
+        return null;
     }
-
-    function evaluate() {
+   
+    function evaluateOperation() {
         let input = document.getElementById("input").value.trim();
-        let operationText = currentOperation.trim();
+        let operationText = String(currentOperation).trim();
 
         if (operationText && input) {
 
             let result = calculate();
             // document.getElementById("result").innerText = result;
-            console.log(result);
+            // console.log(result);
             document.getElementById("input").value = result;
             // console.log("input: ", document.getElementById("input").value);
             selectedOperator = null;
@@ -180,7 +186,7 @@
             case '=':
             case 'Enter':
                 event.preventDefault();
-                evaluate();
+                evaluateOperation();
                 break;
             case 'c':
             case 'C':
