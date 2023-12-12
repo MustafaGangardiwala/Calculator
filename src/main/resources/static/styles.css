@@ -1,0 +1,35 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+form {
+    text-align: center;
+}
+
+input {
+    /* width: 50px; Set the width to match the buttons */
+    width: 270px; 
+    font-size: 1.5em; /* Increase input font size */
+    padding: 10px; /* Adjust input padding for larger size */
+    margin: 5px; /* Add some margin around the input */
+}
+
+button {
+    /* display: block; */
+    width: 60px; /* Set a fixed width for all buttons */
+    height: 60px; /* Set a fixed height for all buttons */
+    font-size: 1.5em; /* Increase button font size */
+    padding: 10px 20px; /* Adjust button padding for larger size */
+    margin: 5px; /* Add some margin between buttons */
+}
+button:last-child {
+    width: 270px; /* Set a larger width for the "=" button */
+}
+
+#result {
+    font-size: 1.2em; /* Increase font size of the result */
+}

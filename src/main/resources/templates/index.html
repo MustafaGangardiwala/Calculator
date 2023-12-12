@@ -1,0 +1,194 @@
+<!-- calculator.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+<!-- <h2>Calculator</h2> -->
+
+<form action="/calculate" method="post">
+    <input type="text" name="input" id="input" readonly/>
+    <br/>
+
+    <span id="operation" ></span>
+
+    <button type="button" onclick="appendToInput('1')">1</button>
+    <button type="button" onclick="appendToInput('2')">2</button>
+    <button type="button" onclick="appendToInput('3')">3</button>
+    <button type="button" onclick="setOperation('+')">+</button>
+    <br/>
+
+    <button type="button" onclick="appendToInput('4')">4</button>
+    <button type="button" onclick="appendToInput('5')">5</button>
+    <button type="button" onclick="appendToInput('6')">6</button>
+    <button type="button" onclick="setOperation('-')">-</button>
+    <br/>
+
+    <button type="button" onclick="appendToInput('7')">7</button>
+    <button type="button" onclick="appendToInput('8')">8</button>
+    <button type="button" onclick="appendToInput('9')">9</button>
+    <button type="button" onclick="setOperation('*')">*</button>
+    <br/>
+
+    <button type="button" onclick="appendToInput('0')">0</button>
+    <button type="button" onclick="appendToInput('.')">.</button>
+    <button type="button" onclick="clearInput()">C</button>
+    <button type="button" onclick="setOperation('/')">/</button>
+    <br/>
+
+    <button type="button" onclick="evaluate()">=</button>
+</form>
+
+<!-- Result: <span id="result"></span> -->
+
+<script>
+    let currentOperation = "";
+    let selectedOperator = null;
+
+    function appendToInput(value) {
+        document.getElementById("input").value += value;
+        console.log(document.getElementById("input").value );
+    }
+
+    function clearInput() {
+        document.getElementById("input").value = "";
+        document.getElementById("input").placeholder = "";
+        currentOperation = "";
+        selectedOperator = null;
+    }
+
+    function setOperation(operator) {
+
+        if (selectedOperator === operator) {
+            return;
+        } 
+            let currentInput = document.getElementById("input").value;
+            console.log("Current: ",currentInput);
+            if(selectedOperator === null){
+                currentOperation = currentInput + " " + operator + " ";
+                console.log(currentOperation);
+            }
+            else
+            {
+                let modifiedOperation = currentOperation.replace(selectedOperator, operator);
+                currentOperation = modifiedOperation;
+                console.log(currentOperation);
+            }
+            document.getElementById("input").value = "";
+            document.getElementById("input").placeholder = currentInput;
+            selectedOperator = operator;
+    }
+
+    function calculate() {
+        let input = document.getElementById("input").value;
+        let operationText = currentOperation.trim();
+        let operation = operationText.charAt(operationText.length - 1);
+
+        if (operation && input) {
+            let firstNumber = parseFloat(operationText.split(" ")[0]);
+            let secondNumber = parseFloat(input);
+
+            switch (operation) {
+                case '+':
+                    return firstNumber + secondNumber;
+                case '-':
+                    return firstNumber - secondNumber;
+                case '*':
+                    return firstNumber * secondNumber;
+                case '/':
+                    if (secondNumber !== 0) {
+                        return firstNumber / secondNumber;
+                    } else {
+                        return "Error: Division by zero";
+                    }
+            }
+        }
+
+        return "Error: Invalid operation";
+    }
+
+    function evaluate() {
+        let input = document.getElementById("input").value.trim();
+        let operationText = currentOperation.trim();
+
+        if (operationText && input) {
+
+            let result = calculate();
+            // document.getElementById("result").innerText = result;
+            console.log(result);
+            document.getElementById("input").value = result;
+            // console.log("input: ", document.getElementById("input").value);
+            selectedOperator = null;
+            currentOperation = result;
+        }
+        else {
+            alert("Error: Invalid input or operation");
+        }
+    }
+    // Add event listeners for keyboard input
+    document.addEventListener("keydown", function (event) {
+        switch (event.key) {
+            case '1':
+                appendToInput('1');
+                break;
+            case '2':
+                appendToInput('2');
+                break;
+            case '3':
+                appendToInput('3');
+                break;
+            case '4':
+                appendToInput('4');
+                break;
+            case '5':
+                appendToInput('5');
+                break;
+            case '6':
+                appendToInput('6');
+                break;
+            case '7':
+                appendToInput('7');
+                break;
+            case '8':
+                appendToInput('8');
+                break;
+            case '9':
+                appendToInput('9');
+                break;
+            case '0':
+                appendToInput('0');
+                break;
+            case '+':
+                setOperation('+');
+                break;
+            case '-':
+                setOperation('-');
+                break;
+            case '*':
+                setOperation('*');
+                break;
+            case '/':
+                setOperation('/');
+                break;
+            case '.':
+                appendToInput('.');
+                break;
+            case '=':
+            case 'Enter':
+                event.preventDefault();
+                evaluate();
+                break;
+            case 'c':
+            case 'C':
+                clearInput();
+                break;
+        }
+    });
+</script>
+
+</body>
+</html>
